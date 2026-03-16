@@ -2,7 +2,6 @@
 title: "Using Claude to Codify and Apply Engineering Guidelines"
 description: "How we built codebase-specific context into Claude Code reviews at Wordsmith"
 pubDate: 2026-03-11
-heroImage: '../../assets/claude-ai-logo-d862.png'
 ---
 
 ### The Problem
@@ -28,7 +27,7 @@ The skill is a structured, 7-step workflow that Claude runs whenever it reviews 
 2. Dynamic guideline loading — Based on which files changed, it loads the relevant guideline skills. Python files trigger `/guidelines-python`. Database or repository changes trigger `/guidelines-database`. Frontend changes load `/guidelines-frontend`, `/vercel-react-best-practices`, and `/web-design-guidelines`. This keeps the review focused and doesn't waste tokens loading Python conventions when you only touched a React component.
 
 3. Code analysis — One review looking for two things: bugs and correctness issues (null handling, async problems, N+1 queries, security, dead code), and violations of the conventions loaded in the previous step.
-   - **The Scary Score** — Every review gets a production risk score from 1 to 10. A typo fix is a 1. A new auth middleware is an 8. Schema migrations touching multi-tenant data are a 9 or 10. The score factors in blast radius, whether tests exist, how easy rollback is, whether the code path is concurrent or involves billing. In a world where most of our contributions are now written by AI, this helps human reviewers understand the level of scrutiny required for any given change.
+   - **The Scary Score** — Every review gets a production risk score from 1 to 10. A typo fix is a 1. A new auth middleware is an 8. Schema migrations touching multi-tenant data are a 9 or 10. The score factors in blast radius, whether tests exist, how easy rollback is, whether the code path is concurrent or involves billing. In a world where most of our contributions are now written by AI, this helps human reviewers understand the level of scrutiny required for any given change. The hope is that we'll soon be able to automatically merge AI contributed PRs that have a scary score below a certain threshold. More on this to come in a future blog post.
 
    - **Test recommendations** — Based on the scary score and what changed, it tells you what to run. Frontend changes at score ≥5 get a recommendation to run the Playwright E2E suite. New inference or prompt changes get pointed at the LLM eval suite. New endpoints get flagged for pytest coverage. Not prescriptive — just "here's what you should probably verify before merging."
 
@@ -74,6 +73,8 @@ Same model as interactive Claude Code. We use `claude-opus-4-6` which is the sam
 The skill runs exactly the same code. This is the key thing. The GitHub Action doesn't have a separate "CI mode" or stripped-down prompt. It invokes `/wordsmith-code-review` the same way an engineer would at their terminal. The only difference is it has a PR number to post to.
 
 ## What Does a Review Actually Look Like?
+
+![Example of an automated code review comment on a GitHub PR](../../assets/code-review-example.png)
 
 A typical review surfaces a mix of:
 
