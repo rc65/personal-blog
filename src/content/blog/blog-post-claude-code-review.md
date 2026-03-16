@@ -2,7 +2,7 @@
 title: "Using Claude to Codify and Apply Engineering Guidelines"
 description: "How we built codebase-specific context into Claude Code reviews at Wordsmith"
 pubDate: 2026-03-11
-heroImage: "../../assets/code-review-example.png"
+heroImage: "../../assets/claude-ai-logo-d862.png"
 ---
 
 ### The Problem
